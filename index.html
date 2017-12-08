@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+	<head>
+		<title> geochat </title>
+
+		<style>
+			*{
+				margin:0;
+				padding: 0;
+			}
+			body{
+					
+			}
+			.right{
+				float: right;
+			}
+			.container{
+					height: 520px;
+					width: 400px;
+					margin:0 auto;
+			}
+			.window{
+					border: 1px solid;
+			}
+			.user_queue{
+					height: 400px;
+					width: 100%;
+					border:1px solid;
+					overflow: scroll;
+			}
+			.user_queue li{
+				height: 20px;
+				width: 100%;
+				padding: 3px 6px;
+				list-style: none;
+			}
+			.input{
+					height: 120px;
+					width: 380px;	
+					padding: 10px;
+			}
+			.input textarea{
+				height: 70%;
+				overflow: scroll;
+				width: 300px;
+				border: 0;
+				resize: none;
+			}
+			.input textarea:focus{
+				outline: none !important;
+				border: none;
+
+			}
+			.input button{
+				width: 40px;
+				height: 40px;
+				border-radius: 25px;
+				border: 2px solid red;
+				background-color: white;
+				float: right;
+				margin-top:60px;
+
+			}
+			.input button:focus{
+				float: top;
+			}
+
+		</style>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+		<script>
+  			$(function(){
+  				var socket = io();
+  				$(".input textarea").keypress(function(e){
+  					if(e.which == 13){
+  						$(".input button").click();
+  					}
+  				})
+	  			$(".input button").click(function(){
+	  					var msg = $('.input textarea').val()
+	  					socket.emit('msg', msg);
+	  					$('.user_queue').append("<li><p class='right'>"+msg+"</p></li>")
+	  					$('.input textarea').val("")
+	  					return false
+	  			})
+	  			socket.on('get_msg',function(msg){
+	  					$('.user_queue').append("<li><p>"+msg+"</p></li>")
+	  			})
+	  		})
+		</script>
+	</head>
+	
+	<body>
+
+		<div class="container window">
+			<ul class="user_queue">
+				
+			</ul>
+			<div class="input">
+				<textarea></textarea>
+				<button>Send</button>
+			</div>
+		</div>
+		
+
+	</body>
+</html>
+			
